@@ -3,6 +3,7 @@ use std::time::Duration;
 use bevy::prelude::*;
 mod tilemap;
 
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use tilemap::TileMapPlugin;
 
 fn main() {
@@ -11,6 +12,7 @@ fn main() {
             watch_for_changes: true,
             ..Default::default()
         }))
+        .add_plugin(WorldInspectorPlugin::new())
         .add_plugin(TileMapPlugin)
         .add_startup_system(setup)
         .run()
@@ -33,7 +35,6 @@ pub fn setup(mut commands: Commands) {
         transform: Transform::from_translation(Vec3::new(0., 0., 0.)),
         projection: OrthographicProjection {
             scale: 4.,
-            far: 1000.,
             ..Default::default()
         },
         ..Default::default()
