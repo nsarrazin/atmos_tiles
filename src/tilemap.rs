@@ -16,6 +16,7 @@ pub struct TileMapPlugin;
 impl Plugin for TileMapPlugin {
     fn build(&self, app: &mut App) {
         app.add_startup_system(create_tilemap);
+        app.add_system(rotate_over_time);
     }
 }
 
@@ -40,7 +41,7 @@ fn create_tilemap(
 
     let map_size = Coords { x: 12, y: 12 };
 
-    let tile_storage_id = commands.spawn_empty().id();=
+    let tile_storage_id = commands.spawn_empty().id();
     let mut tile_storage = TileStorage::empty(map_size);
 
     for (y, line) in BufReader::new(file).lines().enumerate() {
@@ -90,4 +91,24 @@ fn create_tilemap(
             }
         }
     }
+
+    commands.entity(tile_storage_id).insert(tile_storage);
+}
+
+fn rotate_over_time(
+    time: Res<Time>,
+    mut query_storage: Query<&mut TileStorage>,
+    mut query: Query<&mut Transform>,
+) {
+    let seconds = time.elapsed_seconds() as u64;
+
+    let tile_storage = query_storage.single_mut();
+
+    let idx = seconds % tile_storage.size.x;
+
+    let pos = Coords { x: idx, y: 0 };
+
+    let mut tile = query.get_mut(tile_storage.get(pos).unwrap()).unwrap();
+
+    tile.rotate(Quat::from_rotation_z(0.01));
 }
