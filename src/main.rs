@@ -48,4 +48,5 @@ pub struct AtmosTile {
     pub n: f32, // moles
     pub x: u16,
     pub y: u16,
+    pub tilemap_id: Entity,
 }
