@@ -27,8 +27,6 @@ impl TileStorage {
 
     pub fn set(&mut self, pos: Coords, tile: Entity) {
         let idx = (pos.y * self.size.x) + pos.x;
-        println!("idx: {}", idx);
-        println!("pos: {:?}", pos);
         self.tiles[idx as usize].replace(tile);
     }
 
