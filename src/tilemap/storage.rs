@@ -1,10 +1,6 @@
 use bevy::prelude::*;
 
-#[derive(Default, Clone, Debug)]
-pub struct Coords {
-    pub x: u64,
-    pub y: u64,
-}
+use crate::tilemap::tiles::Coords;
 
 #[derive(Component, Default, Debug, Clone)]
 pub struct TileStorage {
@@ -22,7 +18,7 @@ impl TileStorage {
 
     pub fn get(&self, pos: Coords) -> Option<Entity> {
         let idx = (pos.y * self.size.x) + pos.x;
-        return self.tiles[idx as usize];
+        self.tiles[idx as usize]
     }
 
     pub fn set(&mut self, pos: Coords, tile: Entity) {
@@ -31,14 +27,10 @@ impl TileStorage {
     }
 
     pub fn iter(&self) -> impl Iterator<Item = &Option<Entity>> {
-        return self.tiles.iter();
+        self.tiles.iter()
     }
 
     pub fn within_bounds(&self, pos: Coords) -> bool {
-        if pos.x >= self.size.x || pos.y >= self.size.y {
-            return false;
-        } else {
-            return true;
-        }
+        !(pos.x >= self.size.x || pos.y >= self.size.y)
     }
 }
